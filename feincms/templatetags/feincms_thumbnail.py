@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------
 
 import re
-from cStringIO import StringIO
+from io import BytesIO
 # Try to import PIL in either of the two ways it can end up installed.
 try:
     from PIL import Image
@@ -96,14 +96,14 @@ class Thumbnailer(object):
 
     def generate(self, storage, original, size, miniature):
         try:
-            image = Image.open(StringIO(storage.open(original).read()))
+            image = Image.open(BytesIO(storage.open(original).read()))
 
             # defining the size
             w, h = int(size['w']), int(size['h'])
 
             format = image.format # Save format for the save() call later
             image.thumbnail([w, h], Image.ANTIALIAS)
-            buf = StringIO()
+            buf = BytesIO()
             if image.mode not in ('RGBA', 'RGB', 'L'):
                 image = image.convert('RGBA')
             image.save(buf, format or 'jpeg', quality=80)
@@ -127,7 +127,7 @@ class CropscaleThumbnailer(Thumbnailer):
 
     def generate(self, storage, original, size, miniature):
         try:
-            image = Image.open(StringIO(storage.open(original).read()))
+            image = Image.open(BytesIO(storage.open(original).read()))
         except:
             # PIL raises a plethora of Exceptions if reading the image
             # is not possible. Since we cannot be sure what Exception will
@@ -163,7 +163,7 @@ class CropscaleThumbnailer(Thumbnailer):
         image = image.crop((x_offset, y_offset, x_offset+int(crop_width), y_offset+int(crop_height)))
         image = image.resize((dst_width, dst_height), Image.ANTIALIAS)
 
-        buf = StringIO()
+        buf = BytesIO()
         if image.mode not in ('RGBA', 'RGB', 'L'):
             image = image.convert('RGBA')
         image.save(buf, format or 'jpeg', quality=100)
