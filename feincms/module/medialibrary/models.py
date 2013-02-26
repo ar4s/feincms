@@ -172,7 +172,7 @@ class MediaFileBase(models.Model, ExtensionsMixin, TranslatedObjectMixin):
         if self.file:
             try:
                 self.file_size = self.file.size
-            except (OSError, IOError, ValueError), e:
+            except (OSError, IOError, ValueError) as e:
                 logger.error("Unable to read file size for %s: %s" % (self, e))
 
         super(MediaFileBase, self).save(*args, **kwargs)
@@ -193,7 +193,7 @@ class MediaFileBase(models.Model, ExtensionsMixin, TranslatedObjectMixin):
             name = self.file.name
         try:
             self.file.storage.delete(name)
-        except Exception, e:
+        except Exception as e:
             logger.warn("Cannot delete media file %s: %s" % (name, e))
 
 # ------------------------------------------------------------------------
