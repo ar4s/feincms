@@ -11,10 +11,8 @@ except ImportError:
     try:
         import Image
     except ImportError:
-        # Django seems to silently swallow the ImportError under certain
-        # circumstances. Raise a generic exception explaining why we are
-        # unable to proceed.
-        raise Exception, 'FeinCMS requires PIL to be installed'
+        # That sucks. We'll just skip resizing.
+        Image = None
 
 from django import template
 from django.utils.encoding import force_unicode
@@ -57,6 +55,10 @@ class Thumbnailer(object):
             filename = self.filename.name
         else:
             filename = force_unicode(self.filename)
+
+        # PIL is not available. Skip everything
+        if not Image:
+            return storage.url(filename)
 
         # defining the filename and the miniature filename
         try:
