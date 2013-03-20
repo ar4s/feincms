@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
@@ -78,6 +79,7 @@ Page.register_extensions(
     )
 
 
+@python_2_unicode_compatible
 class Category(MPTTModel):
     name = models.CharField(max_length=20)
     slug = models.SlugField()
@@ -88,7 +90,7 @@ class Category(MPTTModel):
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 

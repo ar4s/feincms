@@ -11,14 +11,10 @@ from django.db.models import loading
 from django.forms.models import modelform_factory
 from django.http import Http404
 from django.shortcuts import render_to_response
+from django.utils.encoding import force_text
 from django.utils.functional import curry
 from django.utils.translation import ugettext as _
 from django.contrib.admin.options import InlineModelAdmin
-
-try:
-    from django.utils.encoding import force_text
-except ImportError:
-    from django.utils.encoding import force_unicode as force_text
 
 from feincms import settings, ensure_completely_loaded
 from feincms.extensions import ExtensionModelAdmin

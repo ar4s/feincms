@@ -98,8 +98,8 @@ class MediaFileAdmin(admin.ModelAdmin):
     save_on_top       = True
     date_hierarchy    = 'created'
     inlines           = [admin_translationinline(MediaFileTranslation)]
-    list_display      = ['admin_thumbnail', '__unicode__', 'file_info', 'formatted_created']
-    list_display_links = ['__unicode__']
+    list_display      = ['admin_thumbnail', '__str__', 'file_info', 'formatted_created']
+    list_display_links = ['__str__']
     list_filter       = ['type', 'categories']
     list_per_page     = 25
     search_fields     = ['copyright', 'file', 'translations__caption']

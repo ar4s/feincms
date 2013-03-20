@@ -107,7 +107,7 @@ def register(cls, admin_cls):
     except ValueError:
         pos = len(admin_cls.list_display)
 
-    admin_cls.list_display.insert(pos + 1, 'datepublisher_admin')
+    #admin_cls.list_display.insert(pos + 1, 'datepublisher_admin')
 
     admin_cls.add_extension_options(_('Date-based publishing'), {
                 'fields': ('publication_date', 'publication_end_date'),

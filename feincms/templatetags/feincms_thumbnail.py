@@ -17,11 +17,7 @@ except ImportError:
 from django import template
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-
-try:
-    from django.utils.encoding import force_text
-except ImportError:
-    from django.utils.encoding import force_unicode as force_text
+from django.utils.encoding import force_text, python_2_unicode_compatible
 
 from feincms import settings
 
@@ -29,6 +25,7 @@ from feincms import settings
 register = template.Library()
 
 
+@python_2_unicode_compatible
 class Thumbnailer(object):
     THUMBNAIL_SIZE_RE = re.compile(r'^(?P<w>\d+)x(?P<h>\d+)$')
     MARKER = '_thumb_'
@@ -39,9 +36,9 @@ class Thumbnailer(object):
 
     @property
     def url(self):
-        return self.__unicode__()
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         match = self.THUMBNAIL_SIZE_RE.match(self.size)
         if not (self.filename and match):
             return u''

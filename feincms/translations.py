@@ -34,7 +34,8 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
-from django.utils import translation
+from django.utils import six, translation
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from feincms.utils import queryset_transform
@@ -107,7 +108,7 @@ def lookup_translations(language_code=None):
         if not instance_dict:
             return
 
-        candidates = instance_dict.values()[0].translations.model._default_manager.all()
+        candidates = list(instance_dict.values())[0].translations.model._default_manager.all()
 
         if instance_dict:
             _process(candidates, instance_dict, lang_, 'iexact')
@@ -158,6 +159,7 @@ class TranslatedObjectManager(queryset_transform.TransformManager):
         return self.filter(translations__language_code=language)
 
 
+@python_2_unicode_compatible
 class TranslatedObjectMixin(object):
     """
     Mixin with helper methods.
@@ -224,14 +226,14 @@ class TranslatedObjectMixin(object):
     def available_translations(self):
         return self.translations.values_list('language_code', flat=True)
 
-    def __unicode__(self):
+    def __str__(self):
         try:
             translation = self.translation
         except ObjectDoesNotExist:
             return self.__class__.__name__
 
         if translation:
-            return unicode(translation)
+            return six.text_type(translation)
 
         return self.__class__.__name__
 

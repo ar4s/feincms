@@ -6,6 +6,7 @@ import doctest
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils import six
 
 import feincms
 
@@ -48,7 +49,7 @@ class ModelsTest(TestCase):
 
         # I'm not sure whether this test tests anything at all
         self.assertEqual(r.key, t.regions[0].key)
-        self.assertEqual(unicode(r), 'region title')
+        self.assertEqual(six.text_type(r), 'region title')
 
 
 class UtilsTest(TestCase):

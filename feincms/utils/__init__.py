@@ -79,7 +79,7 @@ def shorten_string(str, max_length=50, ellipsis=u' … '):
 
     if len(str) >= max_length:
         first_part = int(max_length * 0.6)
-        next_space = str[first_part:(max_length / 2 - first_part)].find(' ')
+        next_space = str[first_part:(max_length // 2 - first_part)].find(' ')
         if next_space >= 0 and first_part + next_space + len(ellipsis) < max_length:
             first_part += next_space
         return str[:first_part] + ellipsis + str[-(max_length - first_part - len(ellipsis)):]

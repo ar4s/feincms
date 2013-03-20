@@ -12,6 +12,7 @@ from django.contrib.admin.views import main
 from django.db.models import Q
 from django.http import (HttpResponse, HttpResponseBadRequest,
     HttpResponseForbidden, HttpResponseNotFound, HttpResponseServerError)
+from django.utils import six
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -112,7 +113,7 @@ def ajax_editable_boolean(attr, short_description):
     Example::
 
         class MyTreeEditor(TreeEditor):
-            list_display = ('__unicode__', 'active_toggle')
+            list_display = ('__str__', 'active_toggle')
 
             active_toggle = ajax_editable_boolean('active', _('is active'))
     """
@@ -239,7 +240,7 @@ class TreeEditor(ExtensionModelAdmin):
         if hasattr(item, 'short_title'):
             r += escape(item.short_title())
         else:
-            r += escape(unicode(item))
+            r += escape(six.text_type(item))
 #        r += '</span>'
         return mark_safe(r)
     indented_short_title.short_description = _('title')
@@ -408,7 +409,7 @@ class TreeEditor(ExtensionModelAdmin):
             try:
                 tree_manager.move_node(cut_item, pasted_on, position)
             except InvalidMove as e:
-                self.message_user(request, unicode(e))
+                self.message_user(request, six.text_type(e))
                 return HttpResponse('FAIL')
 
             # Ensure that model save has been run
