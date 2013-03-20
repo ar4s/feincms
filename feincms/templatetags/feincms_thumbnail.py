@@ -15,9 +15,13 @@ except ImportError:
         Image = None
 
 from django import template
-from django.utils.encoding import force_unicode
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+
+try:
+    from django.utils.encoding import force_text
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
 
 from feincms import settings
 
@@ -35,7 +39,7 @@ class Thumbnailer(object):
 
     @property
     def url(self):
-        return unicode(self)
+        return self.__unicode__()
 
     def __unicode__(self):
         match = self.THUMBNAIL_SIZE_RE.match(self.size)
@@ -54,7 +58,7 @@ class Thumbnailer(object):
         if hasattr(self.filename, 'name'):
             filename = self.filename.name
         else:
-            filename = force_unicode(self.filename)
+            filename = force_text(self.filename)
 
         # PIL is not available. Skip everything
         if not Image:

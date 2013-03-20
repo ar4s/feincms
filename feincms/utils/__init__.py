@@ -10,12 +10,14 @@ except ImportError:
 from django.conf import settings as django_settings
 from django.db.models import AutoField
 from django.utils.importlib import import_module
+from django.utils import six
+
 
 # ------------------------------------------------------------------------
 def get_object(path, fail_silently=False):
     # Return early if path isn't a string (might already be an callable or
     # a class or whatever)
-    if not isinstance(path, basestring):
+    if not isinstance(path, six.string_types):
         return path
 
     try:

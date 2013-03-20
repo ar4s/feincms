@@ -186,7 +186,7 @@ class TranslatedObjectMixin(object):
         if not language_code:
             language_code = translation.get_language()
         return (('FEINCMS:%d:XLATION:' % getattr(settings, 'SITE_ID', 0)) +
-                '-'.join(['%s' % s for s in
+                '-'.join('%s' % s for s in [
                         self._meta.db_table,
                         self.id,
                         language_code,

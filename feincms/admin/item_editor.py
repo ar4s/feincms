@@ -11,10 +11,14 @@ from django.db.models import loading
 from django.forms.models import modelform_factory
 from django.http import Http404
 from django.shortcuts import render_to_response
-from django.utils.encoding import force_unicode
 from django.utils.functional import curry
 from django.utils.translation import ugettext as _
 from django.contrib.admin.options import InlineModelAdmin
+
+try:
+    from django.utils.encoding import force_text
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
 
 from feincms import settings, ensure_completely_loaded
 from feincms.extensions import ExtensionModelAdmin
@@ -156,7 +160,7 @@ class ItemEditor(ExtensionModelAdmin):
         context = self.get_extra_context(request)
         context.update({
             'frontend_editing': True,
-            'title': _('Change %s') % force_unicode(model_cls._meta.verbose_name),
+            'title': _('Change %s') % force_text(model_cls._meta.verbose_name),
             'object': obj,
             'form': form,
             'is_popup': True,

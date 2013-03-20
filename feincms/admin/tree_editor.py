@@ -2,6 +2,7 @@
 # coding=utf-8
 # ------------------------------------------------------------------------
 
+from functools import reduce
 import json
 import logging
 
@@ -59,7 +60,7 @@ def _build_tree_structure(cls):
         all_nodes[p_id] = []
 
         if parent_id:
-            if not all_nodes.has_key(parent_id):
+            if parent_id not in all_nodes:
                 # This happens very rarely, but protect against parents that
                 # we have yet to iteratove over.
                 all_nodes[parent_id] = []
@@ -84,7 +85,7 @@ def ajax_editable_boolean_cell(item, attr, text='', override=None):
     (useful for "disabled and you can't change it" situations).
     """
     if text:
-        text = '&nbsp;(%s)' % unicode(text)
+        text = u'&nbsp;(%s)' % text
 
     if override is not None:
         a = [ django_boolean_icon(override, text), text ]
@@ -100,7 +101,7 @@ def ajax_editable_boolean_cell(item, attr, text='', override=None):
 
     a.insert(0, '<div id="wrap_%s_%d">' % ( attr, item.pk ))
     a.append('</div>')
-    return unicode(''.join(a))
+    return u''.join(a)
 
 # ------------------------------------------------------------------------
 def ajax_editable_boolean(attr, short_description):
@@ -406,7 +407,7 @@ class TreeEditor(ExtensionModelAdmin):
         if position in ('last-child', 'left', 'right'):
             try:
                 tree_manager.move_node(cut_item, pasted_on, position)
-            except InvalidMove, e:
+            except InvalidMove as e:
                 self.message_user(request, unicode(e))
                 return HttpResponse('FAIL')
 

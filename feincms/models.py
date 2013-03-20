@@ -17,9 +17,14 @@ from django.db.models.fields import FieldDoesNotExist
 from django.db.models.loading import get_model
 from django.forms.widgets import Media
 from django.template.loader import render_to_string
+from django.utils import six
 from django.utils.datastructures import SortedDict
-from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext_lazy as _
+
+try:
+    from django.utils.encoding import force_text
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
 
 from feincms import ensure_completely_loaded
 from feincms.extensions import ExtensionsMixin
@@ -39,7 +44,7 @@ class Region(object):
         self._content_types = []
 
     def __unicode__(self):
-        return force_unicode(self.title)
+        return force_text(self.title)
 
     @property
     def content_types(self):
@@ -78,7 +83,7 @@ class Template(object):
         self.regions_dict = dict((r.key, r) for r in self.regions)
 
     def __unicode__(self):
-        return force_unicode(self.title)
+        return force_text(self.title)
 
 
 class ContentProxy(object):
@@ -223,7 +228,7 @@ class ContentProxy(object):
             self._cache['regions'] = dict((
                 region,
                 sorted(instances, key=lambda c: c.ordering),
-                ) for region, instances in contents.iteritems())
+                ) for region, instances in six.iteritems(contents))
 
         return self._cache['regions']
 

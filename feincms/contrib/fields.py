@@ -4,6 +4,7 @@ import logging
 from django import forms
 from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import six
 
 
 class JSONFormField(forms.fields.CharField):
@@ -35,7 +36,7 @@ class JSONField(models.TextField):
 
         if isinstance(value, dict):
             return value
-        elif isinstance(value, basestring):
+        elif isinstance(value, six.string_types):
             # Avoid asking the JSON decoder to handle empty values:
             if not value:
                 return {}
@@ -72,7 +73,7 @@ class JSONField(models.TextField):
         if isinstance(value, dict):
             value = json.dumps(value, cls=DjangoJSONEncoder)
 
-        assert isinstance(value, basestring)
+        assert isinstance(value, six.string_types)
 
         return value
 
