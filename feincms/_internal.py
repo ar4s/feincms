@@ -33,23 +33,3 @@ def monkeypatch_property(cls):
         setattr(cls, func.__name__, property(func))
         return func
     return decorator
-
-
-def monkeypatch_class(name, bases, namespace):
-    """
-    A metaclass to add a number of methods (or other attributes) to an
-    existing class, using a convenient class notation::
-
-        class <newclass>(<someclass>):
-            __metaclass__ = monkeypatch_class
-            def <method1>(...): ...
-            def <method2>(...): ...
-            ...
-    """
-
-    assert len(bases) == 1, "Exactly one base class required"
-    base = bases[0]
-    for name, value in namespace.iteritems():
-        if name != "__metaclass__":
-            setattr(base, name, value)
-    return base
