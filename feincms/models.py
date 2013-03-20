@@ -5,8 +5,9 @@ All models defined here are abstract, which means no tables are created in
 the feincms\_ namespace.
 """
 
-import sys
+from functools import reduce
 import operator
+import sys
 import warnings
 
 from django.contrib.contenttypes.models import ContentType

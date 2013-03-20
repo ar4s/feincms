@@ -18,16 +18,13 @@ class JSONFormField(forms.fields.CharField):
 
         return super(JSONFormField, self).clean(value, *args, **kwargs)
 
-class JSONField(models.TextField):
+class JSONField(six.with_metaclass(models.SubfieldBase, base=models.TextField)):
     """
     TextField which transparently serializes/unserializes JSON objects
 
     See:
     http://www.djangosnippets.org/snippets/1478/
     """
-
-    # Used so to_python() is called
-    __metaclass__ = models.SubfieldBase
 
     formfield = JSONFormField
 
